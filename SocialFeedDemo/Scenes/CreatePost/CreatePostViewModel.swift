@@ -18,10 +18,11 @@ extension CreatePostView {
 
         // MARK: - Internal Properties
 
-        @Published var carModelName: String = ""
+        @Published var newPost: Item = Item(timestamp: .now)
+        @Published var textFieldText: String = ""
 
-        var isCarModelNameValid: Bool {
-            carModelName.count >= 3
+        var isPostValid: Bool {
+            textFieldText.count >= 3
         }
     }
 }

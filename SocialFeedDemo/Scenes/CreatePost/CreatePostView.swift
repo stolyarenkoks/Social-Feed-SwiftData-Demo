@@ -13,8 +13,6 @@ struct CreatePostView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
 
-    @State var newPost: Item = Item(timestamp: .now)
-
     // MARK: - Private Properties
 
     @ObservedObject private var viewModel: ViewModel
@@ -29,29 +27,98 @@ struct CreatePostView: View {
 
     var body: some View {
         NavigationView {
-            List {
-                VStack {
-                    Text("Post Date: \(newPost.timestamp)")
+            VStack {
+                TextField(
+                    "",
+                    text: $viewModel.textFieldText,
+                    prompt: Text("What do you want to talk about?")
+                        .foregroundColor(Color(uiColor: .darkGray)),
+                    axis: .vertical
+                )
+                .padding(.vertical, 8.0)
+
+                Spacer()
+
+                HStack(spacing: 24.0) {
+
+                    Button(action: dismiss.callAsFunction) {
+                        Image(systemName: "photo")
+                    }
+
+                    Button(action: dismiss.callAsFunction) {
+                        Image(systemName: "square.grid.3x3.square")
+                    }
+
+                    Button(action: dismiss.callAsFunction) {
+                        Image(systemName: "calendar")
+                    }
+
+                    Button(action: dismiss.callAsFunction) {
+                        Image(systemName: "ellipsis")
+                    }
+
+                    Spacer()
                 }
+                .foregroundColor(Color(uiColor: .darkGray))
+                .font(.title3)
+                .padding(.horizontal, 16.0)
+                .padding(.vertical, 8.0)
             }
+            .padding()
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(action: dismiss.callAsFunction) {
-                        Text("Close")
+                    HStack {
+                        Button(action: dismiss.callAsFunction) {
+                            Image(systemName: "xmark")
+                                .font(.headline)
+                                .foregroundColor(Color(uiColor: .darkGray))
+                        }
+
+                        Button(action: dismiss.callAsFunction) {
+                            HStack(spacing: 16.0) {
+                                Image("userImage")
+                                    .resizable()
+                                    .frame(width: 35, height: 35)
+                                    .clipShape(.capsule)
+
+                                Text("Anyone")
+                                    .font(.headline)
+                                    .foregroundColor(Color(uiColor: .darkGray))
+                            }
+                        }
                     }
                 }
 
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: addItem) {
-                        Text("Post")
+                    HStack {
+                        Button(action: addItem) {
+                            Image(systemName: "clock")
+                                .font(.headline)
+                                .foregroundColor(Color(uiColor: .darkGray))
+                        }
+
+                        postButton()
                     }
                 }
             }
         }
     }
 
+    private func postButton() -> some View {
+        Button(action: addItem) {
+            Text("Post")
+                .font(.callout)
+                .bold()
+                .foregroundStyle(viewModel.isPostValid ? .white : Color(uiColor: .systemGray))
+                .padding(8)
+                .background(viewModel.isPostValid ? .blue : Color(uiColor: .systemGray5))
+                .clipShape(.capsule)
+        }
+        .disabled(!viewModel.isPostValid)
+    }
+
     private func addItem() {
-        modelContext.insert(newPost)
+        modelContext.insert(viewModel.newPost)
         dismiss()
     }
 }
