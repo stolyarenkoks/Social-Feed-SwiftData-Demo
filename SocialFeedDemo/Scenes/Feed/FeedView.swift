@@ -11,7 +11,7 @@ import SwiftUI
 
 struct FeedView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Query private var items: [Post]
 
     @State private var isPresented = false
 
@@ -32,9 +32,13 @@ struct FeedView: View {
             List {
                 ForEach(items) { item in
                     NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
+                        Text("Item at \(item.date, format: Date.FormatStyle(date: .numeric, time: .standard))")
                     } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                        VStack {
+                            Text(item.text)
+
+                            Text(item.date, format: Date.FormatStyle(date: .numeric, time: .standard))
+                        }
                     }
                 }
                 .onDelete(perform: deleteItems)
@@ -61,7 +65,7 @@ struct FeedView: View {
 
     private func addItem() {
         withAnimation {
-            let newItem = Item(timestamp: Date())
+            let newItem = Post()
             modelContext.insert(newItem)
         }
     }
@@ -77,5 +81,5 @@ struct FeedView: View {
 
 #Preview {
     FeedView(viewModel: .init())
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: Post.self, inMemory: true)
 }

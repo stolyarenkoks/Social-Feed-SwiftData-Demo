@@ -91,7 +91,7 @@ struct CreatePostView: View {
 
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack {
-                        Button(action: addItem) {
+                        Button(action: dismiss.callAsFunction) {
                             Image(systemName: "clock")
                                 .font(.headline)
                                 .foregroundColor(Color(uiColor: .darkGray))
@@ -105,7 +105,7 @@ struct CreatePostView: View {
     }
 
     private func postButton() -> some View {
-        Button(action: addItem) {
+        Button(action: addPost) {
             Text("Post")
                 .font(.callout)
                 .bold()
@@ -117,7 +117,8 @@ struct CreatePostView: View {
         .disabled(!viewModel.isPostValid)
     }
 
-    private func addItem() {
+    private func addPost() {
+        viewModel.newPost.text = viewModel.textFieldText
         modelContext.insert(viewModel.newPost)
         dismiss()
     }
