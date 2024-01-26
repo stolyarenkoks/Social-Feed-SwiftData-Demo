@@ -11,7 +11,7 @@ import SwiftUI
 
 struct FeedView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Post]
+    @Query private var posts: [Post]
 
     @State private var isPresented = false
 
@@ -30,19 +30,26 @@ struct FeedView: View {
     var body: some View {
         NavigationSplitView {
             List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.date, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        VStack {
-                            Text(item.text)
+                ForEach(posts) { post in
+                    ZStack {
+                        FeedPostView(post: post, isDetailed: false)
 
-                            Text(item.date, format: Date.FormatStyle(date: .numeric, time: .standard))
+                        NavigationLink {
+                            ScrollView {
+                                FeedPostView(post: post, isDetailed: true)
+                            }
+                        } label: {
+                            EmptyView()
                         }
+                    }
+                    .listRowInsets(EdgeInsets())
+                    .alignmentGuide(.listRowSeparatorLeading) { _ in
+                            .zero
                     }
                 }
                 .onDelete(perform: deleteItems)
             }
+            .listStyle(.plain)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
@@ -73,7 +80,7 @@ struct FeedView: View {
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(items[index])
+                modelContext.delete(posts[index])
             }
         }
     }

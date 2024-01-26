@@ -20,6 +20,7 @@
 		C45674F72B6280B200F002EC /* CreatePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45674F62B6280B200F002EC /* CreatePostViewModel.swift */; };
 		C45674FD2B62812800F002EC /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C45674FC2B62812800F002EC /* README.md */; };
 		C45674FF2B62817400F002EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C45674FE2B62817400F002EC /* LaunchScreen.storyboard */; };
+		C4F7CFF62B63C5FC00689D91 /* FeedPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F7CFF52B63C5FC00689D91 /* FeedPostView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		C45674F62B6280B200F002EC /* CreatePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewModel.swift; sourceTree = "<group>"; };
 		C45674FC2B62812800F002EC /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		C45674FE2B62817400F002EC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C4F7CFF52B63C5FC00689D91 /* FeedPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPostView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 		C45674F02B62807100F002EC /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C4F7CFF52B63C5FC00689D91 /* FeedPostView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 			files = (
 				C4070F5F2ACC600F003601DE /* CreatePostView.swift in Sources */,
 				C4070F502ACC5F55003601DE /* FeedView.swift in Sources */,
+				C4F7CFF62B63C5FC00689D91 /* FeedPostView.swift in Sources */,
 				C45674F52B6280A900F002EC /* FeedViewModel.swift in Sources */,
 				C4070F522ACC5F55003601DE /* Post.swift in Sources */,
 				C45674F72B6280B200F002EC /* CreatePostViewModel.swift in Sources */,

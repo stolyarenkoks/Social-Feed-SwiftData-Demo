@@ -118,8 +118,8 @@ struct CreatePostView: View {
     }
 
     private func addPost() {
-        viewModel.newPost.text = viewModel.textFieldText
-        modelContext.insert(viewModel.newPost)
+        let newPost = Post(text: viewModel.textFieldText, image: UIImage(named: "userImage"))
+        modelContext.insert(newPost)
         dismiss()
     }
 }

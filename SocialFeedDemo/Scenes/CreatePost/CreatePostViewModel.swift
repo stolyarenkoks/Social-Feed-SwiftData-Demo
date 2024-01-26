@@ -18,7 +18,6 @@ extension CreatePostView {
 
         // MARK: - Internal Properties
 
-        @Published var newPost: Post = Post()
         @Published var textFieldText: String = ""
 
         var isPostValid: Bool {
