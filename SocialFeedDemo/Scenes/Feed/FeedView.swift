@@ -27,17 +27,15 @@ struct FeedView: View {
     // MARK: - Body
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 ForEach(posts) { post in
                     ZStack {
-                        FeedPostView(post: post, isDetailed: false)
+                        FeedPostView(post: post)
 
-                        NavigationLink {
-                            ScrollView {
-                                FeedPostView(post: post, isDetailed: true)
-                            }
-                        } label: { EmptyView() }
+                        NavigationLink(destination: FeedPostDetailsView(post: post )) {
+                            EmptyView()
+                        }
                     }
                     .listRowInsets(EdgeInsets())
                     .alignmentGuide(.listRowSeparatorLeading) { _ in .zero }

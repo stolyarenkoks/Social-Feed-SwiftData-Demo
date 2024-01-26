@@ -44,5 +44,7 @@ enum Const {
 
     enum CreatePost {
         static let title = ""
+
+        static let textFieldPlaceholder = "What do you want to talk about?"
     }
 }

@@ -21,7 +21,7 @@ extension FeedView {
         @Published var isCreatePostPresented = false
 
         // MARK: - Internal Methods
-    
+
         func presentCreatePost() {
             isCreatePostPresented.toggle()
         }

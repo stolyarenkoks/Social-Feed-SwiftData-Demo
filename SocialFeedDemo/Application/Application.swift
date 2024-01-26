@@ -27,7 +27,7 @@ struct Application: App {
 
     var body: some Scene {
         WindowGroup {
-            FeedView(viewModel: .init())
+            MainTabView()
         }
         .modelContainer(sharedModelContainer)
     }

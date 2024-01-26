@@ -32,7 +32,7 @@ struct CreatePostView: View {
                 TextField(
                     "",
                     text: $viewModel.textFieldText,
-                    prompt: Text("What do you want to talk about?")
+                    prompt: Text(Const.CreatePost.textFieldPlaceholder)
                         .foregroundColor(Color(uiColor: .darkGray)),
                     axis: .vertical
                 )
