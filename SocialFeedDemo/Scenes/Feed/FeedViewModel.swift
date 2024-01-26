@@ -18,10 +18,12 @@ extension FeedView {
 
         // MARK: - Internal Properties
 
-        @Published var carModelName: String = ""
+        @Published var isCreatePostPresented = false
 
-        var isCarModelNameValid: Bool {
-            carModelName.count >= 3
+        // MARK: - Internal Methods
+    
+        func presentCreatePost() {
+            isCreatePostPresented.toggle()
         }
     }
 }

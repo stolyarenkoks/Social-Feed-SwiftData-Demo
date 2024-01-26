@@ -6,18 +6,21 @@
 //  Copyright © 2024 SKS. All rights reserved.
 //
 
+import Foundation
 import SwiftData
-import SwiftUI
 
 @Model
 final class Post {
     var text: String
+
+    @Attribute(.externalStorage)
     var imageData: Data?
+
     var date: Date
 
-    init(text: String = "", image: UIImage? = nil, date: Date = .now) {
+    init(text: String = "", imageData: Data? = nil, date: Date = .now) {
         self.text = text
-        self.imageData = image?.pngData()
+        self.imageData = imageData
         self.date = date
     }
 }

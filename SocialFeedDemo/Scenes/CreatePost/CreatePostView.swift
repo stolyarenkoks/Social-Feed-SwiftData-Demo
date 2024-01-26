@@ -6,14 +6,15 @@
 //  Copyright © 2024 SKS. All rights reserved.
 //
 
+import PhotosUI
 import SwiftUI
 
 struct CreatePostView: View {
 
+    // MARK: - Private Properties
+
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
-
-    // MARK: - Private Properties
 
     @ObservedObject private var viewModel: ViewModel
 
@@ -35,15 +36,16 @@ struct CreatePostView: View {
                         .foregroundColor(Color(uiColor: .darkGray)),
                     axis: .vertical
                 )
-                .padding(.vertical, 8.0)
+                .padding()
 
                 Spacer()
 
-                HStack(spacing: 24.0) {
+                if let image = viewModel.selectedImage {
+                    imagePreview(uiImage: image)
+                }
 
-                    Button(action: dismiss.callAsFunction) {
-                        Image(systemName: "photo")
-                    }
+                HStack(spacing: 24.0) {
+                    imagePicker()
 
                     Button(action: dismiss.callAsFunction) {
                         Image(systemName: "square.grid.3x3.square")
@@ -61,10 +63,8 @@ struct CreatePostView: View {
                 }
                 .foregroundColor(Color(uiColor: .darkGray))
                 .font(.title3)
-                .padding(.horizontal, 16.0)
-                .padding(.vertical, 8.0)
+                .padding(24.0)
             }
-            .padding()
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     HStack {
@@ -117,12 +117,52 @@ struct CreatePostView: View {
         .disabled(!viewModel.isPostValid)
     }
 
+    private func imagePreview(uiImage: UIImage) -> some View {
+        ZStack {
+            Image(uiImage: uiImage)
+                .resizable()
+
+            Color.black.opacity(0.3)
+        }
+        .frame(height: 200)
+        .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+        .padding(.horizontal, 16.0)
+        .overlay(alignment: .topTrailing) {
+            removeImageButton()
+        }
+    }
+
+    private func removeImageButton() -> some View {
+        Button(action: {
+            viewModel.removeImage()
+        }, label: {
+            Image(systemName: "xmark")
+                .font(.headline)
+                .foregroundColor(Color(uiColor: .white))
+        })
+        .padding(.vertical, 24.0)
+        .padding(.horizontal, 32.0)
+    }
+
+    private func imagePicker() -> some View {
+        PhotosPicker(selection: $viewModel.imagePickerItem, matching: .images) {
+            Image(systemName: "photo")
+        }
+        .onChange(of: viewModel.imagePickerItem) {
+            Task {
+                await viewModel.prepareImage()
+            }
+        }
+    }
+
     private func addPost() {
-        let newPost = Post(text: viewModel.textFieldText, image: UIImage(named: "userImage"))
+        let newPost = Post(text: viewModel.textFieldText, imageData: viewModel.selectedImageData)
         modelContext.insert(newPost)
         dismiss()
     }
 }
+
+// MARK: - Preview
 
 #Preview {
     CreatePostView(viewModel: .init())

@@ -10,12 +10,11 @@ import SwiftData
 import SwiftUI
 
 struct FeedView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var posts: [Post]
-
-    @State private var isPresented = false
 
     // MARK: - Private Properties
+
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \Post.date, order: .reverse) private var posts: [Post]
 
     @ObservedObject private var viewModel: ViewModel
 
@@ -28,7 +27,7 @@ struct FeedView: View {
     // MARK: - Body
 
     var body: some View {
-        NavigationSplitView {
+        NavigationView {
             List {
                 ForEach(posts) { post in
                     ZStack {
@@ -38,42 +37,26 @@ struct FeedView: View {
                             ScrollView {
                                 FeedPostView(post: post, isDetailed: true)
                             }
-                        } label: {
-                            EmptyView()
-                        }
+                        } label: { EmptyView() }
                     }
                     .listRowInsets(EdgeInsets())
-                    .alignmentGuide(.listRowSeparatorLeading) { _ in
-                            .zero
-                    }
+                    .alignmentGuide(.listRowSeparatorLeading) { _ in .zero }
                 }
                 .onDelete(perform: deleteItems)
             }
             .listStyle(.plain)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
                 ToolbarItem {
                     Button(action: {
-                        self.isPresented.toggle()
+                        viewModel.presentCreatePost()
                     }, label: {
-                        Label("Create Post", systemImage: "plus")
+                        Image(systemName: "plus")
                     })
                 }
             }
-            .fullScreenCover(isPresented: $isPresented) {
+            .fullScreenCover(isPresented: $viewModel.isCreatePostPresented) {
                 CreatePostView(viewModel: .init())
             }
-        } detail: {
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Post()
-            modelContext.insert(newItem)
         }
     }
 
@@ -85,6 +68,8 @@ struct FeedView: View {
         }
     }
 }
+
+// MARK: - Preview
 
 #Preview {
     FeedView(viewModel: .init())

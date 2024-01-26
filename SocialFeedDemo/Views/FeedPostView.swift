@@ -38,11 +38,13 @@ struct FeedPostView: View {
     }
 }
 
+// MARK: - Previews
+
 #Preview("Not Detailed") {
     FeedPostView(
         post: .init(
             text: "Post Text\nline2\nline3\nline4",
-            image: UIImage(named: "userImage"),
+            imageData: UIImage(named: "userImage")?.pngData(),
             date: .now),
         isDetailed: false
     )
@@ -52,7 +54,7 @@ struct FeedPostView: View {
     FeedPostView(
         post: .init(
             text: "Post Text\nline2\nline3\nline4",
-            image: UIImage(named: "userImage"),
+            imageData: UIImage(named: "userImage")?.pngData(),
             date: .now),
         isDetailed: true
     )
