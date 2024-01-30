@@ -24,3 +24,17 @@ final class Post {
         self.date = date
     }
 }
+
+extension Post {
+
+    static func mock(imageData: Data? = nil) -> Post {
+        return Post(
+            text: "Everything is proceeding very quickly and new frameworks will be released as well as existing ones will" +
+            " be improved. Despite this, now, in 2023, there is a clear trend in the combination of Swift + SwiftUI + Combine, " +
+            "each of which Apple continues to develop and improve, so for the next year, and most likely several, " +
+            "this set will only replace the old one 🚀",
+            imageData: imageData,
+            date: .now
+        )
+    }
+}

@@ -38,10 +38,11 @@ struct FeedView: View {
                         }
                     }
                     .listRowInsets(EdgeInsets())
-                    .alignmentGuide(.listRowSeparatorLeading) { _ in .zero }
+                    .listRowSeparator(.hidden)
                 }
                 .onDelete(perform: deleteItems)
             }
+            .background(Color(uiColor: .systemGray6))
             .listStyle(.plain)
             .toolbar {
                 ToolbarItem {
@@ -55,6 +56,8 @@ struct FeedView: View {
             .fullScreenCover(isPresented: $viewModel.isCreatePostPresented) {
                 CreatePostView(viewModel: .init())
             }
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarBackground(.white, for: .navigationBar)
         }
     }
 

@@ -121,6 +121,7 @@ struct CreatePostView: View {
         ZStack {
             Image(uiImage: uiImage)
                 .resizable()
+                .aspectRatio(contentMode: .fill)
 
             Color.black.opacity(0.3)
         }
