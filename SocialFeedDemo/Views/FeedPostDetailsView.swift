@@ -27,6 +27,6 @@ struct FeedPostDetailsView: View {
 
 #Preview("Not Detailed") {
     FeedPostDetailsView(
-        post: .mock(imageData: UIImage(named: "userPost")?.pngData())
+        post: .mock()
     )
 }

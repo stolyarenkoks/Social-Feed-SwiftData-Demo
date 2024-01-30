@@ -13,35 +13,62 @@ struct FeedPostView: View {
     // MARK: - Internal Properties
 
     let post: Post
-    var isDetailed: Bool = false
+    let isDetailed: Bool
+    let deletePostAction: ((UUID) -> Void)?
+
+    // MARK: - Private Properties
+
+    @State private var showingOptions = false
+
+    // MARK: - Init
+
+    init(post: Post, isDetailed: Bool = false, deletePostAction: ((UUID) -> Void)? = nil) {
+        self.post = post
+        self.isDetailed = isDetailed
+        self.deletePostAction = deletePostAction
+        self.showingOptions = showingOptions
+    }
 
     // MARK: - Body
 
     var body: some View {
-        VStack(alignment: .center, spacing: 12.0) {
-
+        VStack {
             if !isDetailed {
-                Color(uiColor: .systemGray6)
-                    .frame(height: 10)
+                Spacer()
             }
 
-            userInfo()
+            VStack(spacing: 12.0) {
+                userInfo()
 
-            postText()
+                postText()
 
-            if let imageData = post.imageData, let uiImage = UIImage(data: imageData) {
-                postImage(uiImage: uiImage)
+                if let image = post.image {
+                    postImage(uiImage: image)
+                }
+
+                postReactions()
+
+                postActions()
             }
-
-            postReactions()
-
-            postActions()
+            .background(.white)
+        }
+        .actionSheet(isPresented: $showingOptions) {
+            ActionSheet(
+                title: Text("What do you want to do with the post?"),
+                buttons: [
+                    .destructive(Text("Delete Post")) {
+                        print("Delete Post with Id: \(post.id)")
+                        deletePostAction?(post.id)
+                    },
+                    .cancel()
+                ]
+            )
         }
     }
 
     private func userInfo() -> some View {
         HStack {
-            Image("userImage")
+            Image(uiImage: User.current.image ?? UIImage.user)
                 .resizable()
                 .frame(width: 50, height: 50)
                 .clipShape(Circle())
@@ -52,11 +79,19 @@ struct FeedPostView: View {
                 }
 
             VStack(alignment: .leading, spacing: .zero) {
-                Text("👨🏻‍💻 Konstantin Stolyarenko")
-                    .font(.callout)
-                    .bold()
+                HStack(spacing: 4) {
+                    Text(User.current.fullName)
+                        .font(.callout)
+                        .bold()
 
-                Text("iOS Technical Lead | Senior iOS Software Engineer")
+                    if post.userId == User.current.id {
+                        Text("• You")
+                            .font(.footnote)
+                            .foregroundStyle(Color(uiColor: UIColor.darkGray))
+                    }
+                }
+
+                Text(User.current.jobTitle)
                     .font(.caption)
 
                 HStack(spacing: 4) {
@@ -71,8 +106,20 @@ struct FeedPostView: View {
             }
 
             Spacer()
+
+            if !isDetailed {
+                Button(action: {
+                    showingOptions = true
+                }, label: {
+                    Image(systemName: "ellipsis")
+                        .font(.title3)
+                })
+                .foregroundStyle(Color(uiColor: UIColor.darkGray))
+                .padding(.top, -16)
+            }
         }
         .padding(.horizontal)
+        .padding(.top, 12.0)
     }
 
     private func postText() -> some View {
@@ -161,28 +208,28 @@ struct FeedPostView: View {
 
 #Preview("Not Detailed - Image") {
     FeedPostView(
-        post: .mock(imageData: UIImage(named: "userPost")?.pngData()),
+        post: .mock(),
         isDetailed: false
     )
 }
 
 #Preview("Not Detailed - w/o Image") {
     FeedPostView(
-        post: .mock(),
+        post: .mock(imageData: nil),
         isDetailed: false
     )
 }
 
 #Preview("Detailed - Image") {
     FeedPostView(
-        post: .mock(imageData: UIImage(named: "userPost")?.pngData()),
+        post: .mock(),
         isDetailed: true
     )
 }
 
 #Preview("Detailed - w/o Image") {
     FeedPostView(
-        post: .mock(),
+        post: .mock(imageData: nil),
         isDetailed: true
     )
 }

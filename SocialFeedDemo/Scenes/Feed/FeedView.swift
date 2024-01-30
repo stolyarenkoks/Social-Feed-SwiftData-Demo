@@ -28,19 +28,12 @@ struct FeedView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(posts) { post in
-                    ZStack {
-                        FeedPostView(post: post)
-
-                        NavigationLink(destination: FeedPostDetailsView(post: post )) {
-                            EmptyView()
-                        }
+            ScrollView {
+                VStack {
+                    ForEach(posts) { post in
+                        FeedPostView(post: post, deletePostAction: { deletePost(id: $0) })
                     }
-                    .listRowInsets(EdgeInsets())
-                    .listRowSeparator(.hidden)
                 }
-                .onDelete(perform: deleteItems)
             }
             .background(Color(uiColor: .systemGray6))
             .listStyle(.plain)
@@ -61,11 +54,11 @@ struct FeedView: View {
         }
     }
 
-    private func deleteItems(offsets: IndexSet) {
+    private func deletePost(id: UUID) {
         withAnimation {
-            for index in offsets {
-                modelContext.delete(posts[index])
-            }
+            guard let postToDelete = posts.first(where: { $0.id == id }) else { return }
+            let modelToDelete = modelContext.model(for: postToDelete.persistentModelID)
+            modelContext.delete(modelToDelete)
         }
     }
 }
@@ -74,5 +67,5 @@ struct FeedView: View {
 
 #Preview {
     FeedView(viewModel: .init())
-        .modelContainer(for: Post.self, inMemory: true)
+        .modelContainer(for: [Post.self], inMemory: true)
 }

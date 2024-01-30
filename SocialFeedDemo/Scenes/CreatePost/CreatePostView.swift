@@ -76,7 +76,7 @@ struct CreatePostView: View {
 
                         Button(action: dismiss.callAsFunction) {
                             HStack(spacing: 16.0) {
-                                Image("userImage")
+                                Image(uiImage: viewModel.currentUser.image ?? .user)
                                     .resizable()
                                     .frame(width: 35, height: 35)
                                     .clipShape(.capsule)
@@ -157,7 +157,11 @@ struct CreatePostView: View {
     }
 
     private func addPost() {
-        let newPost = Post(text: viewModel.textFieldText, imageData: viewModel.selectedImageData)
+        let newPost = Post(
+            userId: viewModel.currentUser.id,
+            text: viewModel.textFieldText,
+            imageData: viewModel.selectedImageData
+        )
         modelContext.insert(newPost)
         dismiss()
     }
@@ -167,4 +171,5 @@ struct CreatePostView: View {
 
 #Preview {
     CreatePostView(viewModel: .init())
+        .modelContainer(for: [Post.self], inMemory: true)
 }

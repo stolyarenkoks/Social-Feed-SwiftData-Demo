@@ -34,6 +34,8 @@ extension CreatePostView {
             textFieldText.count >= 3
         }
 
+        let currentUser: User = .current
+
         // MARK: - Internal Methods
 
         func prepareImage() async {

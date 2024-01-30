@@ -78,4 +78,5 @@ struct MainTabView: View {
 
 #Preview {
     MainTabView()
+        .modelContainer(for: [Post.self], inMemory: true)
 }

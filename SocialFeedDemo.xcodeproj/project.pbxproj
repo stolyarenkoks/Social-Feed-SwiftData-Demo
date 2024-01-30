@@ -20,6 +20,7 @@
 		C45674F72B6280B200F002EC /* CreatePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45674F62B6280B200F002EC /* CreatePostViewModel.swift */; };
 		C45674FD2B62812800F002EC /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C45674FC2B62812800F002EC /* README.md */; };
 		C45674FF2B62817400F002EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C45674FE2B62817400F002EC /* LaunchScreen.storyboard */; };
+		C4E7A17E2B69302D00A4D54A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E7A17D2B69302D00A4D54A /* User.swift */; };
 		C4F7CFF62B63C5FC00689D91 /* FeedPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F7CFF52B63C5FC00689D91 /* FeedPostView.swift */; };
 		C4F7CFF92B63DFDD00689D91 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F7CFF82B63DFDD00689D91 /* MainTabView.swift */; };
 		C4F7CFFB2B63E54C00689D91 /* FeedPostDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F7CFFA2B63E54C00689D91 /* FeedPostDetailsView.swift */; };
@@ -40,6 +41,7 @@
 		C45674F62B6280B200F002EC /* CreatePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewModel.swift; sourceTree = "<group>"; };
 		C45674FC2B62812800F002EC /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		C45674FE2B62817400F002EC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C4E7A17D2B69302D00A4D54A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C4F7CFF52B63C5FC00689D91 /* FeedPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPostView.swift; sourceTree = "<group>"; };
 		C4F7CFF82B63DFDD00689D91 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		C4F7CFFA2B63E54C00689D91 /* FeedPostDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPostDetailsView.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 		C45674EF2B62806600F002EC /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				C4E7A17D2B69302D00A4D54A /* User.swift */,
 				C4070F512ACC5F55003601DE /* Post.swift */,
 			);
 			path = Models;
@@ -298,6 +301,7 @@
 				C45674F72B6280B200F002EC /* CreatePostViewModel.swift in Sources */,
 				C4070F4E2ACC5F55003601DE /* Application.swift in Sources */,
 				C45674EE2B62805E00F002EC /* Const.swift in Sources */,
+				C4E7A17E2B69302D00A4D54A /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
