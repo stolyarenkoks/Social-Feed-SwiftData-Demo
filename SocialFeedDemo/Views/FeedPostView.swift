@@ -14,19 +14,25 @@ struct FeedPostView: View {
 
     let post: Post
     let isDetailed: Bool
+    let likePostAction: ((UUID) -> Void)?
     let deletePostAction: ((UUID) -> Void)?
 
     // MARK: - Private Properties
 
-    @State private var showingOptions = false
+    @State private var isActionSheetPresented = false
 
     // MARK: - Init
 
-    init(post: Post, isDetailed: Bool = false, deletePostAction: ((UUID) -> Void)? = nil) {
+    init(
+        post: Post,
+        isDetailed: Bool = false,
+        likePostAction: ((UUID) -> Void)? = nil,
+        deletePostAction: ((UUID) -> Void)? = nil
+    ) {
         self.post = post
         self.isDetailed = isDetailed
+        self.likePostAction = likePostAction
         self.deletePostAction = deletePostAction
-        self.showingOptions = showingOptions
     }
 
     // MARK: - Body
@@ -52,12 +58,11 @@ struct FeedPostView: View {
             }
             .background(.white)
         }
-        .actionSheet(isPresented: $showingOptions) {
+        .actionSheet(isPresented: $isActionSheetPresented) {
             ActionSheet(
                 title: Text("What do you want to do with the post?"),
                 buttons: [
                     .destructive(Text("Delete Post")) {
-                        print("Delete Post with Id: \(post.id)")
                         deletePostAction?(post.id)
                     },
                     .cancel()
@@ -109,7 +114,7 @@ struct FeedPostView: View {
 
             if !isDetailed {
                 Button(action: {
-                    showingOptions = true
+                    isActionSheetPresented = true
                 }, label: {
                     Image(systemName: "ellipsis")
                         .font(.title3)
@@ -164,7 +169,7 @@ struct FeedPostView: View {
                 .clipShape(Circle())
                 .font(.system(size: 9))
 
-            Text("6")
+            Text("\(post.likesCount)")
                 .padding(.horizontal, 8.0)
                 .foregroundStyle(Color(uiColor: UIColor.darkGray))
                 .font(.footnote)
@@ -180,25 +185,29 @@ struct FeedPostView: View {
                 .frame(maxHeight: 0.5)
 
             HStack(spacing: 65.0) {
-                actionButton(imageName: "hand.thumbsup", title: "Like")
-                actionButton(imageName: "text.bubble", title: "Comment")
-                actionButton(imageName: "arrow.2.squarepath", title: "Repost")
-                actionButton(imageName: "paperplane.fill", title: "Send")
+                actionButton(imageName: "hand.thumbsup", title: "Like", action: {
+                    likePostAction?(post.id)
+                })
+                actionButton(imageName: "text.bubble", title: "Comment", action: {})
+                actionButton(imageName: "arrow.2.squarepath", title: "Repost", action: {})
+                actionButton(imageName: "paperplane.fill", title: "Send", action: {})
             }
         }
         .padding(.bottom, 8.0)
     }
 
-    private func actionButton(imageName: String, title: String) -> some View {
-        Button(action: {}, label: {
-            VStack(spacing: 2) {
-                Image(systemName: imageName)
-                    .font(.footnote)
+    private func actionButton(imageName: String, title: String, action: @escaping () -> Void) -> some View {
+        Button(
+            action: action,
+            label: {
+                VStack(spacing: 2) {
+                    Image(systemName: imageName)
+                        .font(.footnote)
 
-                Text(title)
-                    .font(.caption)
-            }
-        })
+                    Text(title)
+                        .font(.caption)
+                }
+            })
         .foregroundStyle(Color(uiColor: UIColor.darkGray))
         .bold()
     }

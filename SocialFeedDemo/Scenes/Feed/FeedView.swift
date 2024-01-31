@@ -31,7 +31,11 @@ struct FeedView: View {
             ScrollView {
                 VStack {
                     ForEach(posts) { post in
-                        FeedPostView(post: post, deletePostAction: { deletePost(id: $0) })
+                        FeedPostView(
+                            post: post,
+                            likePostAction: { likePost(id: $0) },
+                            deletePostAction: { deletePost(id: $0) }
+                        )
                     }
                 }
             }
@@ -57,8 +61,13 @@ struct FeedView: View {
     private func deletePost(id: UUID) {
         withAnimation {
             guard let postToDelete = posts.first(where: { $0.id == id }) else { return }
-            let modelToDelete = modelContext.model(for: postToDelete.persistentModelID)
-            modelContext.delete(modelToDelete)
+            modelContext.delete(postToDelete)
+        }
+    }
+
+    private func likePost(id: UUID) {
+        withAnimation(.bouncy) {
+            posts.first(where: { $0.id == id })?.likesCount += 1
         }
     }
 }

@@ -16,6 +16,7 @@ final class Post {
 
     let userId: UUID
     var text: String
+    var likesCount: Int
     let date: Date
 
     @Attribute(.externalStorage)
@@ -37,12 +38,14 @@ final class Post {
         id: UUID = UUID(),
         userId: UUID,
         text: String,
+        likesCount: Int = 0,
         date: Date = .now,
         imageData: Data? = nil
     ) {
         self.id = id
         self.userId = userId
         self.text = text
+        self.likesCount = likesCount
         self.date = date
         self.imageData = imageData
     }
@@ -57,6 +60,7 @@ extension Post {
         " be improved. Despite this, now, in 2023, there is a clear trend in the combination of Swift + SwiftUI + Combine, " +
         "each of which Apple continues to develop and improve, so for the next year, and most likely several, " +
         "this set will only replace the old one 🚀",
+        likesCount: Int = 6,
         date: Date = .now,
         imageData: Data? = UIImage.userPost.pngData()
     ) -> Self {
@@ -64,6 +68,7 @@ extension Post {
             id: id,
             userId: userId,
             text: text,
+            likesCount: likesCount,
             date: date,
             imageData: imageData
         )
