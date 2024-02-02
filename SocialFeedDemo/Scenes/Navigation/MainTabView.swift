@@ -37,7 +37,7 @@ struct MainTabView: View {
                 })
                 .tag(1)
 
-            Color(uiColor: .systemBackground)
+            EmptyStateView(type: .notImplemented)
                 .tabItem({
                     Label("My Network", systemImage: "person.2")
                 })
@@ -49,13 +49,13 @@ struct MainTabView: View {
                 })
                 .tag(3)
 
-            Color(uiColor: .systemBackground)
+            EmptyStateView(type: .notImplemented)
                 .tabItem({
                     Label("Notifications", systemImage: "bell")
                 })
                 .tag(4)
 
-            Color(uiColor: .systemBackground)
+            EmptyStateView(type: .notImplemented)
                 .tabItem({
                     Label("Jobs", systemImage: "briefcase")
                 })
@@ -64,8 +64,8 @@ struct MainTabView: View {
         .accentColor(.primary)
         .onChange(of: selectedTab) { _, _ in
             if selectedTab == 3 {
-                selectedTab = .zero
                 isPresented = true
+                selectedTab = .zero
             }
         }
         .fullScreenCover(isPresented: $isPresented) {

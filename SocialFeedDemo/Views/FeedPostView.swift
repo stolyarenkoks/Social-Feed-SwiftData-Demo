@@ -6,8 +6,8 @@
 //  Copyright © 2024 SKS. All rights reserved.
 //
 
-import SwiftUI
 import Lottie
+import SwiftUI
 
 struct FeedPostView: View {
 
@@ -47,16 +47,13 @@ struct FeedPostView: View {
 
             VStack(spacing: 12.0) {
                 userInfo()
+                postText()
 
-                VStack(spacing: 12.0) {
-                    postText()
-
-                    if let image = post.image {
-                        postImage(uiImage: image)
-                    }
-                }
-                .overlay(alignment: .bottomLeading) {
-                    animationView()
+                if let image = post.image {
+                    postImage(uiImage: image)
+                        .overlay(alignment: .bottomLeading) {
+                            animationView()
+                        }
                 }
 
                 postReactions()
@@ -86,7 +83,7 @@ struct FeedPostView: View {
                 .overlay(alignment: .bottomTrailing) {
                     Circle()
                         .frame(width: 11, height: 11)
-                        .foregroundStyle(.green)
+                        .foregroundStyle(.linkedInGreen)
                 }
 
             VStack(alignment: .leading, spacing: .zero) {
@@ -159,7 +156,7 @@ struct FeedPostView: View {
             .animationDidFinish { _ in
                 playbackMode = LottiePlaybackMode.paused
             }
-            .opacity(playbackMode != .paused ? 1.0 : 0.0)
+            .opacity(playbackMode != .paused ? 1 : .zero)
             .padding(.bottom, -8.0)
             .padding(.leading, -12.0)
     }

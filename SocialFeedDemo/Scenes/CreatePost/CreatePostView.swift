@@ -111,7 +111,7 @@ struct CreatePostView: View {
                 .bold()
                 .foregroundStyle(viewModel.isPostValid ? .white : Color(uiColor: .systemGray))
                 .padding(8)
-                .background(viewModel.isPostValid ? .blue : Color(uiColor: .systemGray5))
+                .background(viewModel.isPostValid ? .linkedInBlue : Color(uiColor: .systemGray5))
                 .clipShape(.capsule)
         }
         .disabled(!viewModel.isPostValid)

@@ -28,19 +28,24 @@ struct FeedView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack {
-                    ForEach(posts) { post in
-                        FeedPostView(
-                            post: post,
-                            likePostAction: { likePost(id: $0) },
-                            deletePostAction: { deletePost(id: $0) }
-                        )
+            Group {
+                if !posts.isEmpty {
+                    ScrollView {
+                        VStack {
+                            ForEach(posts) { post in
+                                FeedPostView(
+                                    post: post,
+                                    likePostAction: { likePost(id: $0) },
+                                    deletePostAction: { deletePost(id: $0) }
+                                )
+                            }
+                        }
                     }
+                } else {
+                    EmptyStateView(type: .noPosts)
                 }
             }
             .background(Color(uiColor: .systemGray6))
-            .listStyle(.plain)
             .toolbar {
                 ToolbarItem {
                     Button(action: {
