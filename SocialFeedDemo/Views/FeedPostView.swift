@@ -170,6 +170,7 @@ struct FeedPostView: View {
                 .font(.system(size: 9))
 
             Text("\(post.likesCount)")
+                .contentTransition(.numericText())
                 .padding(.horizontal, 8.0)
                 .foregroundStyle(Color(uiColor: UIColor.darkGray))
                 .font(.footnote)

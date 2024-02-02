@@ -66,7 +66,7 @@ struct FeedView: View {
     }
 
     private func likePost(id: UUID) {
-        withAnimation(.bouncy) {
+        withAnimation {
             posts.first(where: { $0.id == id })?.likesCount += 1
         }
     }
