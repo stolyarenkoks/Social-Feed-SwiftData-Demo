@@ -14,6 +14,7 @@ No additional setup is needed. Build project using Xcode.
 * Swift
 * SwiftUI
 * SwiftData
+* Lottie
 
 ## Versions
 * Xcode 15.2 (latest)

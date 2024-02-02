@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Lottie
 
 struct FeedPostView: View {
 
@@ -20,6 +21,7 @@ struct FeedPostView: View {
     // MARK: - Private Properties
 
     @State private var isActionSheetPresented = false
+    @State private var playbackMode: LottiePlaybackMode = LottiePlaybackMode.paused
 
     // MARK: - Init
 
@@ -46,14 +48,18 @@ struct FeedPostView: View {
             VStack(spacing: 12.0) {
                 userInfo()
 
-                postText()
+                VStack(spacing: 12.0) {
+                    postText()
 
-                if let image = post.image {
-                    postImage(uiImage: image)
+                    if let image = post.image {
+                        postImage(uiImage: image)
+                    }
+                }
+                .overlay(alignment: .bottomLeading) {
+                    animationView()
                 }
 
                 postReactions()
-
                 postActions()
             }
             .background(.white)
@@ -146,6 +152,18 @@ struct FeedPostView: View {
             .clipped()
     }
 
+    private func animationView() -> some View {
+        LottieView(animation: .named("like-animation"))
+            .animationSpeed(2.0)
+            .playbackMode(playbackMode)
+            .animationDidFinish { _ in
+                playbackMode = LottiePlaybackMode.paused
+            }
+            .opacity(playbackMode != .paused ? 1.0 : 0.0)
+            .padding(.bottom, -8.0)
+            .padding(.leading, -12.0)
+    }
+
     private func postReactions() -> some View {
         HStack(spacing: -2) {
             Image(systemName: "hand.thumbsup.fill")
@@ -187,6 +205,7 @@ struct FeedPostView: View {
 
             HStack(spacing: 65.0) {
                 actionButton(imageName: "hand.thumbsup", title: "Like", action: {
+                    playbackMode = .playing(.fromProgress(0, toProgress: 0.8, loopMode: .playOnce))
                     likePostAction?(post.id)
                 })
                 actionButton(imageName: "text.bubble", title: "Comment", action: {})
