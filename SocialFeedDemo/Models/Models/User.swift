@@ -3,6 +3,7 @@
 //  SocialFeedDemo
 //
 //  Created by Konstantin Stolyarenko on 30.01.2024.
+//  Copyright © 2024 SKS. All rights reserved.
 //
 
 import UIKit

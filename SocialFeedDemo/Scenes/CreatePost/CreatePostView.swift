@@ -81,7 +81,7 @@ struct CreatePostView: View {
                                     .frame(width: 35, height: 35)
                                     .clipShape(.capsule)
 
-                                Text("Anyone")
+                                Text(Const.CreatePost.anyoneTitle)
                                     .font(.headline)
                                     .foregroundColor(Color(uiColor: .darkGray))
                             }
@@ -106,7 +106,7 @@ struct CreatePostView: View {
 
     private func postButton() -> some View {
         Button(action: addPost) {
-            Text("Post")
+            Text(Const.CreatePost.postButtonTitle)
                 .font(.callout)
                 .bold()
                 .foregroundStyle(viewModel.isPostValid ? .white : Color(uiColor: .systemGray))

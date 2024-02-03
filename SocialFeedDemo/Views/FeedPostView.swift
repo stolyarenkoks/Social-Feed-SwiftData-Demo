@@ -9,32 +9,38 @@
 import Lottie
 import SwiftUI
 
+// MARK: - FeedPostView
+
 struct FeedPostView: View {
 
     // MARK: - Internal Properties
 
     let post: Post
     let isDetailed: Bool
-    let likePostAction: ((UUID) -> Void)?
-    let deletePostAction: ((UUID) -> Void)?
+    let likePostAction: (() -> Void)?
+    let deletePostAction: (() -> Void)?
+    let showMoreAction: (() -> Void)?
 
     // MARK: - Private Properties
 
-    @State private var isActionSheetPresented = false
-    @State private var playbackMode: LottiePlaybackMode = LottiePlaybackMode.paused
+    @State private var isTruncated: Bool = false
+    @State private var isActionSheetPresented: Bool = false
+    @State private var playbackMode: LottiePlaybackMode = .paused
 
     // MARK: - Init
 
     init(
         post: Post,
         isDetailed: Bool = false,
-        likePostAction: ((UUID) -> Void)? = nil,
-        deletePostAction: ((UUID) -> Void)? = nil
+        likePostAction: (() -> Void)? = nil,
+        deletePostAction: (() -> Void)? = nil,
+        showMoreAction: (() -> Void)? = nil
     ) {
         self.post = post
         self.isDetailed = isDetailed
         self.likePostAction = likePostAction
         self.deletePostAction = deletePostAction
+        self.showMoreAction = showMoreAction
     }
 
     // MARK: - Body
@@ -63,10 +69,10 @@ struct FeedPostView: View {
         }
         .actionSheet(isPresented: $isActionSheetPresented) {
             ActionSheet(
-                title: Text("What do you want to do with the post?"),
+                title: Text(Const.FeedPostView.actionSheetTitle),
                 buttons: [
-                    .destructive(Text("Delete Post")) {
-                        deletePostAction?(post.id)
+                    .destructive(Text(Const.FeedPostView.actionSheetDeleteButtonTitle)) {
+                        deletePostAction?()
                     },
                     .cancel()
                 ]
@@ -93,7 +99,7 @@ struct FeedPostView: View {
                         .bold()
 
                     if post.userId == User.current.id {
-                        Text("• You")
+                        Text("\(Const.General.bulletPointSymbol) You")
                             .font(.footnote)
                             .foregroundStyle(Color(uiColor: UIColor.darkGray))
                     }
@@ -105,7 +111,7 @@ struct FeedPostView: View {
                 HStack(spacing: 4) {
                     Text(post.date, format: Date.FormatStyle(date: .complete, time: .standard))
 
-                    Text("•")
+                    Text(Const.General.bulletPointSymbol)
 
                     Image(systemName: "globe.americas.fill")
                 }
@@ -131,13 +137,19 @@ struct FeedPostView: View {
     }
 
     private func postText() -> some View {
-        HStack {
-            Text(post.text)
+        VStack {
+            HStack {
+                TruncableTextView(
+                    text: Text(post.text),
+                    lineLimit: isDetailed ? nil : 3
+                ) {
+                    isTruncated = $0
+                }
                 .font(.footnote)
                 .padding(.horizontal, 16.0)
-                .lineLimit(isDetailed ? nil : 3)
 
-            Spacer()
+                Spacer()
+            }
         }
     }
 
@@ -191,6 +203,22 @@ struct FeedPostView: View {
                 .font(.footnote)
 
             Spacer()
+
+            if !isDetailed && isTruncated {
+                Button(action: {
+                    showMoreAction?()
+                }, label: {
+                    HStack(spacing: 4) {
+                        Text(Const.FeedPostView.seeMoreButtonTitle)
+                            .font(.footnote)
+
+                        Image(systemName: "chevron.right")
+                            .font(.caption2)
+                    }
+                    .foregroundStyle(Color(uiColor: UIColor.darkGray))
+                    .bold()
+                })
+            }
         }
         .padding(.horizontal)
     }
@@ -201,13 +229,13 @@ struct FeedPostView: View {
                 .frame(maxHeight: 0.5)
 
             HStack(spacing: 65.0) {
-                actionButton(imageName: "hand.thumbsup", title: "Like", action: {
+                actionButton(imageName: "hand.thumbsup", title: Const.FeedPostView.likeButtonTitle, action: {
                     playbackMode = .playing(.fromProgress(0, toProgress: 0.8, loopMode: .playOnce))
-                    likePostAction?(post.id)
+                    likePostAction?()
                 })
-                actionButton(imageName: "text.bubble", title: "Comment", action: {})
-                actionButton(imageName: "arrow.2.squarepath", title: "Repost", action: {})
-                actionButton(imageName: "paperplane.fill", title: "Send", action: {})
+                actionButton(imageName: "text.bubble", title: Const.FeedPostView.commentButtonTitle, action: {})
+                actionButton(imageName: "arrow.2.squarepath", title: Const.FeedPostView.repostButtonTitle, action: {})
+                actionButton(imageName: "paperplane.fill", title: Const.FeedPostView.sendButtonTitle, action: {})
             }
         }
         .padding(.bottom, 8.0)

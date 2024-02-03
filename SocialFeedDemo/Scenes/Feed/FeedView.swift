@@ -35,8 +35,9 @@ struct FeedView: View {
                             ForEach(posts) { post in
                                 FeedPostView(
                                     post: post,
-                                    likePostAction: { likePost(id: $0) },
-                                    deletePostAction: { deletePost(id: $0) }
+                                    likePostAction: { likePost(id: post.id) },
+                                    deletePostAction: { deletePost(id: post.id) },
+                                    showMoreAction: { viewModel.showPostDetails(post: post) }
                                 )
                             }
                         }
@@ -58,6 +59,11 @@ struct FeedView: View {
             .fullScreenCover(isPresented: $viewModel.isCreatePostPresented) {
                 CreatePostView(viewModel: .init())
             }
+            .navigationDestination(isPresented: $viewModel.isPostDetailsPresented, destination: {
+                if let post = $viewModel.selectedPost.wrappedValue {
+                    FeedPostDetailsView(post: post)
+                }
+            })
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbarBackground(.white, for: .navigationBar)
         }

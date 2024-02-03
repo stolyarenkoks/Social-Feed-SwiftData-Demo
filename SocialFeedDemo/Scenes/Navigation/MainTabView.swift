@@ -3,6 +3,7 @@
 //  SocialFeedDemo
 //
 //  Created by Konstantin Stolyarenko on 26.01.2024.
+//  Copyright © 2024 SKS. All rights reserved.
 //
 
 import SwiftUI
@@ -33,31 +34,31 @@ struct MainTabView: View {
 
             FeedView(viewModel: .init())
                 .tabItem({
-                    Label("Home", systemImage: "house")
+                    Label(Const.MainTabView.homeTitle, systemImage: "house")
                 })
                 .tag(1)
 
             EmptyStateView(type: .notImplemented)
                 .tabItem({
-                    Label("My Network", systemImage: "person.2")
+                    Label(Const.MainTabView.myNetworkTitle, systemImage: "person.2")
                 })
                 .tag(2)
 
             Color(uiColor: .systemBackground)
                 .tabItem({
-                    Label("Post", systemImage: "plus.app")
+                    Label(Const.MainTabView.postTitle, systemImage: "plus.app")
                 })
                 .tag(3)
 
             EmptyStateView(type: .notImplemented)
                 .tabItem({
-                    Label("Notifications", systemImage: "bell")
+                    Label(Const.MainTabView.notificationsTitle, systemImage: "bell")
                 })
                 .tag(4)
 
             EmptyStateView(type: .notImplemented)
                 .tabItem({
-                    Label("Jobs", systemImage: "briefcase")
+                    Label(Const.MainTabView.jobsTitle, systemImage: "briefcase")
                 })
                 .tag(5)
         }

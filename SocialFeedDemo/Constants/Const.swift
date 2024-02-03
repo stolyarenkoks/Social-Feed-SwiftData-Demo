@@ -36,6 +36,42 @@ enum AlphaState: CGFloat {
 
 enum Const {
 
+    // MARK: - General
+
+    enum General {
+        static let bulletPointSymbol = "•"
+    }
+
+    // MARK: - Enums
+
+    enum EmptyStateType {
+        static let noPostsTitle = "No posts available at the moment"
+        static let notImplementedTitle = "Module is unavailable at the moment"
+    }
+
+    // MARK: - Navigation
+
+    enum MainTabView {
+        static let homeTitle = "Home"
+        static let myNetworkTitle = "My Network"
+        static let postTitle = "Post"
+        static let notificationsTitle = "Notifications"
+        static let jobsTitle = "Jobs"
+    }
+
+    // MARK: - Views
+
+    enum FeedPostView {
+        static let actionSheetTitle = "What do you want to do with the post?"
+        static let actionSheetDeleteButtonTitle = "Delete Post"
+
+        static let seeMoreButtonTitle = "See more"
+        static let likeButtonTitle = "Like"
+        static let commentButtonTitle = "Comment"
+        static let repostButtonTitle = "Repost"
+        static let sendButtonTitle = "Send"
+    }
+
     // MARK: - Scenes
 
     enum FeedView {
@@ -46,5 +82,7 @@ enum Const {
         static let title = ""
 
         static let textFieldPlaceholder = "What do you want to talk about?"
+        static let anyoneTitle = "Anyone"
+        static let postButtonTitle = "Post"
     }
 }

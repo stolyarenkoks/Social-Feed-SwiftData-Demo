@@ -42,7 +42,7 @@ extension CreatePostView {
             if let imageData = try? await imagePickerItem?.loadTransferable(type: Data.self) {
                 selectedImageData = imageData
             } else {
-                print("Failed")
+                print("CreatePostView: Failed to load image!")
             }
         }
 

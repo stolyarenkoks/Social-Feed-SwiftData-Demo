@@ -3,6 +3,7 @@
 //  SocialFeedDemo
 //
 //  Created by Konstantin Stolyarenko on 02.02.2024.
+//  Copyright © 2024 SKS. All rights reserved.
 //
 
 import Foundation
@@ -14,9 +15,9 @@ enum EmptyStateType {
     var title: String {
         switch self {
         case .noPosts:
-            "No posts available at the moment"
+            Const.EmptyStateType.noPostsTitle
         case .notImplemented:
-            "Module is unavailable at the moment"
+            Const.EmptyStateType.notImplementedTitle
         }
     }
 

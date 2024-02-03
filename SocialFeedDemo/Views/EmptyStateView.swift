@@ -3,10 +3,13 @@
 //  SocialFeedDemo
 //
 //  Created by Konstantin Stolyarenko on 02.02.2024.
+//  Copyright © 2024 SKS. All rights reserved.
 //
 
 import Lottie
 import SwiftUI
+
+// MARK: - EmptyStateView
 
 struct EmptyStateView: View {
 
@@ -19,7 +22,7 @@ struct EmptyStateView: View {
     var body: some View {
         ZStack {
             Color(uiColor: .systemGray6)
-    
+
             LottieView(animation: .named(type.animationName))
                 .playing(loopMode: .loop)
 

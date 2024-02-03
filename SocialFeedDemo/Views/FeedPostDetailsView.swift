@@ -3,9 +3,12 @@
 //  SocialFeedDemo
 //
 //  Created by Konstantin Stolyarenko on 26.01.2024.
+//  Copyright © 2024 SKS. All rights reserved.
 //
 
 import SwiftUI
+
+// MARK: - FeedPostDetailsView
 
 struct FeedPostDetailsView: View {
 
