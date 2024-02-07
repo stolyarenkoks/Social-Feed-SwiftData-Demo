@@ -41,6 +41,7 @@ struct FeedView: View {
                                     showMoreAction: { viewModel.showDetails(post: post) }
                                 )
                             }
+                            .id(UUID())
                         }
                     }
                 } else {
