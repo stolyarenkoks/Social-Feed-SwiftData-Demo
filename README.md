@@ -1,5 +1,5 @@
 # Social Feed SwiftData Demo like LinkedIn
-An example of a custom animation of the user's avatar smoothly flowing and dissolving into the Dynamic Island, following the example of how it is done in Telegram. 
+An example of the LinkedIn main feed, featuring the post creation screen along with related post actions and animations, stored in SwiftData instead of BE.
 Developed entirely natively using Swift, SwiftUI and SwiftData.
 
 ![Demo](demo.gif)

@@ -48,11 +48,26 @@ struct FeedView: View {
             }
             .background(Color(uiColor: .systemGray6))
             .toolbar {
-                ToolbarItem {
+                ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
                         viewModel.presentCreatePost()
                     }, label: {
                         Image(systemName: "plus")
+                    })
+                }
+
+                ToolbarItem(placement: .principal) {
+                    SearchBarView(searchText: $viewModel.searchText)
+                }
+
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(action: {
+                        viewModel.showUserProfile()
+                    }, label: {
+                        Image(uiImage: viewModel.currentUser.image ?? .user)
+                            .resizable()
+                            .frame(width: 35, height: 35)
+                            .clipShape(.capsule)
                     })
                 }
             }
@@ -66,6 +81,7 @@ struct FeedView: View {
             })
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbarBackground(.white, for: .navigationBar)
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 

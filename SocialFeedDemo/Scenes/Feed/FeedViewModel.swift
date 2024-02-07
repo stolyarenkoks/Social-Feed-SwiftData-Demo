@@ -21,6 +21,9 @@ extension FeedView {
         @Published var isCreatePostPresented = false
         @Published var isPostDetailsPresented = false
         @Published var selectedPost: Post?
+        @Published var searchText = ""
+
+        let currentUser: User = .current
 
         // MARK: - Internal Methods
 
@@ -31,6 +34,10 @@ extension FeedView {
         func showPostDetails(post: Post) {
             selectedPost = post
             isPostDetailsPresented = true
+        }
+
+        func showUserProfile() {
+            print("Show User Profile")
         }
     }
 }
