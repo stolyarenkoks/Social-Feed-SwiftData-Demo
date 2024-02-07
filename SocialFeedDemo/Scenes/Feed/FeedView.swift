@@ -31,14 +31,14 @@ struct FeedView: View {
             Group {
                 if !posts.isEmpty {
                     ScrollView {
-                        VStack {
+                        LazyVStack {
                             ForEach(posts) { post in
                                 FeedPostView(
                                     post: post,
                                     user: viewModel.currentUser,
-                                    likePostAction: { likePost(id: post.id) },
-                                    deletePostAction: { deletePost(id: post.id) },
-                                    showMoreAction: { viewModel.showPostDetails(post: post) }
+                                    likePostAction: { like(post: post) },
+                                    deletePostAction: { delete(post: post) },
+                                    showMoreAction: { viewModel.showDetails(post: post) }
                                 )
                             }
                         }
@@ -75,7 +75,7 @@ struct FeedView: View {
             }
             .navigationDestination(isPresented: $viewModel.isPostDetailsPresented, destination: {
                 if let post = $viewModel.selectedPost.wrappedValue {
-                    FeedPostDetailsView(post: post, user: viewModel.currentUser, likePostAction: { likePost(id: post.id) })
+                    FeedPostDetailsView(post: post, user: viewModel.currentUser, likePostAction: { like(post: post) })
                 }
             })
             .toolbarBackground(.visible, for: .navigationBar)
@@ -86,16 +86,15 @@ struct FeedView: View {
 
     // MARK: - Private Methods
 
-    private func deletePost(id: UUID) {
+    private func delete(post: Post) {
         withAnimation {
-            guard let postToDelete = posts.first(where: { $0.id == id }) else { return }
-            modelContext.delete(postToDelete)
+            modelContext.delete(post)
         }
     }
 
-    private func likePost(id: UUID) {
+    private func like(post: Post) {
         withAnimation {
-            posts.first(where: { $0.id == id })?.likesCount += 1
+            post.likesCount += 1
         }
     }
 }

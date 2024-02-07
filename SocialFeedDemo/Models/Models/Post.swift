@@ -22,16 +22,12 @@ final class Post {
     @Attribute(.externalStorage)
     private var imageData: Data?
 
+    /// Any computed properties are automatically transient.
     var image: UIImage? {
-        get {
-            if let imageData = imageData {
-                return UIImage(data: imageData)
-            }
-            return nil
+        if let imageData = imageData {
+            return UIImage(data: imageData)
         }
-        set {
-            imageData = newValue?.pngData()
-        }
+        return nil
     }
 
     init(
@@ -62,7 +58,7 @@ extension Post {
         "this set will only replace the old one 🚀",
         likesCount: Int = 6,
         date: Date = .now,
-        imageData: Data? = UIImage.userPost.pngData()
+        imageData: Data? = UIImage.userPost.jpegData(compressionQuality: 0.1)
     ) -> Self {
         .init(
             id: id,

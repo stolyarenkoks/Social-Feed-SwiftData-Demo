@@ -41,7 +41,8 @@ extension CreatePostView {
 
         func prepareImage() async {
             if let imageData = try? await imagePickerItem?.loadTransferable(type: Data.self) {
-                selectedImageData = imageData
+                let compressedImageData = UIImage(data: imageData)?.jpegData(compressionQuality: 0.1)
+                selectedImageData = compressedImageData
             } else {
                 print("CreatePostView: Failed to load image!")
             }

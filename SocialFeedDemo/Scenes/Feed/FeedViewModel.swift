@@ -31,7 +31,7 @@ extension FeedView {
             isCreatePostPresented.toggle()
         }
 
-        func showPostDetails(post: Post) {
+        func showDetails(post: Post) {
             selectedPost = post
             isPostDetailsPresented = true
         }
