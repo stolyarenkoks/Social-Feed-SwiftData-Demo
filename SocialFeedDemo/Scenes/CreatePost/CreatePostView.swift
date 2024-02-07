@@ -14,7 +14,7 @@ struct CreatePostView: View {
     // MARK: - Private Properties
 
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
 
     @ObservedObject private var viewModel: ViewModel
 
@@ -47,17 +47,9 @@ struct CreatePostView: View {
                 HStack(spacing: 24.0) {
                     imagePicker()
 
-                    Button(action: dismiss.callAsFunction) {
-                        Image(systemName: "square.grid.3x3.square")
-                    }
-
-                    Button(action: dismiss.callAsFunction) {
-                        Image(systemName: "calendar")
-                    }
-
-                    Button(action: dismiss.callAsFunction) {
-                        Image(systemName: "ellipsis")
-                    }
+                    Button("", systemImage: "square.grid.3x3.square") {}
+                    Button("", systemImage: "calendar") {}
+                    Button("", systemImage: "ellipsis") {}
 
                     Spacer()
                 }
@@ -68,13 +60,13 @@ struct CreatePostView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     HStack {
-                        Button(action: dismiss.callAsFunction) {
-                            Image(systemName: "xmark")
-                                .font(.headline)
-                                .foregroundColor(Color(uiColor: .darkGray))
+                        Button("", systemImage: "xmark") {
+                            viewModel.dismiss()
                         }
+                        .font(.headline)
+                        .foregroundColor(Color(uiColor: .darkGray))
 
-                        Button(action: dismiss.callAsFunction) {
+                        Button {} label: {
                             HStack(spacing: 16.0) {
                                 Image(uiImage: viewModel.currentUser.image ?? .user)
                                     .resizable()
@@ -91,18 +83,21 @@ struct CreatePostView: View {
 
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack {
-                        Button(action: dismiss.callAsFunction) {
-                            Image(systemName: "clock")
-                                .font(.headline)
-                                .foregroundColor(Color(uiColor: .darkGray))
-                        }
+                        Button("", systemImage: "clock") {}
+                            .font(.headline)
+                            .foregroundColor(Color(uiColor: .darkGray))
 
                         postButton()
                     }
                 }
             }
         }
+        .onChange(of: viewModel.shouldDismiss) {
+            dismiss()
+        }
     }
+
+    // MARK: - Private Methods
 
     private func postButton() -> some View {
         Button(action: addPost) {
@@ -134,15 +129,13 @@ struct CreatePostView: View {
     }
 
     private func removeImageButton() -> some View {
-        Button(action: {
+        Button("", systemImage: "xmark") {
             viewModel.removeImage()
-        }, label: {
-            Image(systemName: "xmark")
-                .font(.headline)
-                .foregroundColor(Color(uiColor: .white))
-        })
-        .padding(.vertical, 24.0)
-        .padding(.horizontal, 32.0)
+        }
+        .font(.headline)
+        .foregroundColor(Color(uiColor: .white))
+        .padding(.vertical, 16.0)
+        .padding(.horizontal, 24.0)
     }
 
     private func imagePicker() -> some View {
@@ -163,7 +156,7 @@ struct CreatePostView: View {
             imageData: viewModel.selectedImageData
         )
         modelContext.insert(newPost)
-        dismiss()
+        viewModel.dismiss()
     }
 }
 

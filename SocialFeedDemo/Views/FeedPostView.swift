@@ -13,30 +13,31 @@ import SwiftUI
 
 struct FeedPostView: View {
 
-    // MARK: - Internal Properties
-
-    let post: Post
-    let isDetailed: Bool
-    let likePostAction: (() -> Void)?
-    let deletePostAction: (() -> Void)?
-    let showMoreAction: (() -> Void)?
-
     // MARK: - Private Properties
 
     @State private var isTruncated: Bool = false
     @State private var isActionSheetPresented: Bool = false
     @State private var playbackMode: LottiePlaybackMode = .paused
 
+    private let post: Post
+    private let user: User
+    private let isDetailed: Bool
+    private let likePostAction: (() -> Void)?
+    private let deletePostAction: (() -> Void)?
+    private let showMoreAction: (() -> Void)?
+
     // MARK: - Init
 
     init(
         post: Post,
+        user: User,
         isDetailed: Bool = false,
         likePostAction: (() -> Void)? = nil,
         deletePostAction: (() -> Void)? = nil,
         showMoreAction: (() -> Void)? = nil
     ) {
         self.post = post
+        self.user = user
         self.isDetailed = isDetailed
         self.likePostAction = likePostAction
         self.deletePostAction = deletePostAction
@@ -80,9 +81,11 @@ struct FeedPostView: View {
         }
     }
 
+    // MARK: - Private Methods
+
     private func userInfo() -> some View {
         HStack {
-            Image(uiImage: User.current.image ?? UIImage.user)
+            Image(uiImage: user.image ?? UIImage.user)
                 .resizable()
                 .frame(width: 50, height: 50)
                 .clipShape(Circle())
@@ -94,18 +97,18 @@ struct FeedPostView: View {
 
             VStack(alignment: .leading, spacing: .zero) {
                 HStack(spacing: 4) {
-                    Text(User.current.fullName)
+                    Text(user.fullName)
                         .font(.callout)
                         .bold()
 
-                    if post.userId == User.current.id {
+                    if post.userId == user.id {
                         Text("\(Const.General.bulletPointSymbol) You")
                             .font(.footnote)
                             .foregroundStyle(Color(uiColor: UIColor.darkGray))
                     }
                 }
 
-                Text(User.current.jobTitle)
+                Text(user.jobTitle)
                     .font(.caption)
 
                 HStack(spacing: 4) {
@@ -122,12 +125,10 @@ struct FeedPostView: View {
             Spacer()
 
             if !isDetailed {
-                Button(action: {
+                Button("", systemImage: "ellipsis") {
                     isActionSheetPresented = true
-                }, label: {
-                    Image(systemName: "ellipsis")
-                        .font(.title3)
-                })
+                }
+                .font(.title3)
                 .foregroundStyle(Color(uiColor: UIColor.darkGray))
                 .padding(.top, -16)
             }
@@ -139,10 +140,8 @@ struct FeedPostView: View {
     private func postText() -> some View {
         VStack {
             HStack {
-                TruncableTextView(
-                    text: Text(post.text),
-                    lineLimit: isDetailed ? nil : 3
-                ) {
+                TruncableTextView(text: Text(post.text),
+                                  lineLimit: isDetailed ? nil : 3) {
                     isTruncated = $0
                 }
                 .font(.footnote)
@@ -205,9 +204,9 @@ struct FeedPostView: View {
             Spacer()
 
             if !isDetailed && isTruncated {
-                Button(action: {
+                Button {
                     showMoreAction?()
-                }, label: {
+                } label: {
                     HStack(spacing: 4) {
                         Text(Const.FeedPostView.seeMoreButtonTitle)
                             .font(.footnote)
@@ -217,7 +216,7 @@ struct FeedPostView: View {
                     }
                     .foregroundStyle(Color(uiColor: UIColor.darkGray))
                     .bold()
-                })
+                }
             }
         }
         .padding(.horizontal)
@@ -242,17 +241,15 @@ struct FeedPostView: View {
     }
 
     private func actionButton(imageName: String, title: String, action: @escaping () -> Void) -> some View {
-        Button(
-            action: action,
-            label: {
-                VStack(spacing: 2) {
-                    Image(systemName: imageName)
-                        .font(.footnote)
+        Button(action: action, label: {
+            VStack(spacing: 2) {
+                Image(systemName: imageName)
+                    .font(.footnote)
 
-                    Text(title)
-                        .font(.caption)
-                }
-            })
+                Text(title)
+                    .font(.caption)
+            }
+        })
         .foregroundStyle(Color(uiColor: UIColor.darkGray))
         .bold()
     }
@@ -263,6 +260,7 @@ struct FeedPostView: View {
 #Preview("Not Detailed - Image") {
     FeedPostView(
         post: .mock(),
+        user: .mock(),
         isDetailed: false
     )
 }
@@ -270,6 +268,7 @@ struct FeedPostView: View {
 #Preview("Not Detailed - w/o Image") {
     FeedPostView(
         post: .mock(imageData: nil),
+        user: .mock(),
         isDetailed: false
     )
 }
@@ -277,6 +276,7 @@ struct FeedPostView: View {
 #Preview("Detailed - Image") {
     FeedPostView(
         post: .mock(),
+        user: .mock(),
         isDetailed: true
     )
 }
@@ -284,6 +284,7 @@ struct FeedPostView: View {
 #Preview("Detailed - w/o Image") {
     FeedPostView(
         post: .mock(imageData: nil),
+        user: .mock(),
         isDetailed: true
     )
 }

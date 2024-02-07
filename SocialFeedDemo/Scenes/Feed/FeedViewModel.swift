@@ -23,7 +23,7 @@ extension FeedView {
         @Published var selectedPost: Post?
         @Published var searchText = ""
 
-        let currentUser: User = .current
+        let currentUser: User = Application.currentUser
 
         // MARK: - Internal Methods
 

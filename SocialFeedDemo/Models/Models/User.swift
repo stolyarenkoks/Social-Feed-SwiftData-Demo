@@ -8,22 +8,27 @@
 
 import UIKit
 
-final class User {
+final class User: Codable {
+
     let id: UUID
-    var fullName: String
-    var jobTitle: String
-    var image: UIImage?
+    let fullName: String
+    let jobTitle: String
+    let imageName: String
+
+    var image: UIImage? {
+        .init(named: imageName)
+    }
 
     init(
         id: UUID = UUID(),
         fullName: String,
         jobTitle: String,
-        image: UIImage?
+        imageName: String
     ) {
         self.id = id
         self.fullName = fullName
         self.jobTitle = jobTitle
-        self.image = image
+        self.imageName = imageName
     }
 }
 
@@ -33,15 +38,13 @@ extension User {
         id: UUID = UUID(),
         fullName: String = "👨🏻‍💻 Konstantin Stolyarenko",
         jobTitle: String = "iOS Technical Lead | Senior iOS Software Engineer",
-        image: UIImage? = .user
+        imageName: String = "userImage"
     ) -> Self {
         .init(
             id: id,
             fullName: fullName,
             jobTitle: jobTitle,
-            image: image
+            imageName: imageName
         )
     }
-
-    static let current: User = .mock()
 }

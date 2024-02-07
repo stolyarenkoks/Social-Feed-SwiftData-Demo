@@ -35,6 +35,7 @@ struct FeedView: View {
                             ForEach(posts) { post in
                                 FeedPostView(
                                     post: post,
+                                    user: viewModel.currentUser,
                                     likePostAction: { likePost(id: post.id) },
                                     deletePostAction: { deletePost(id: post.id) },
                                     showMoreAction: { viewModel.showPostDetails(post: post) }
@@ -49,11 +50,9 @@ struct FeedView: View {
             .background(Color(uiColor: .systemGray6))
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: {
+                    Button("", systemImage: "plus") {
                         viewModel.presentCreatePost()
-                    }, label: {
-                        Image(systemName: "plus")
-                    })
+                    }
                 }
 
                 ToolbarItem(placement: .principal) {
@@ -61,14 +60,14 @@ struct FeedView: View {
                 }
 
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(action: {
+                    Button {
                         viewModel.showUserProfile()
-                    }, label: {
+                    } label: {
                         Image(uiImage: viewModel.currentUser.image ?? .user)
                             .resizable()
                             .frame(width: 35, height: 35)
                             .clipShape(.capsule)
-                    })
+                    }
                 }
             }
             .fullScreenCover(isPresented: $viewModel.isCreatePostPresented) {
@@ -76,7 +75,7 @@ struct FeedView: View {
             }
             .navigationDestination(isPresented: $viewModel.isPostDetailsPresented, destination: {
                 if let post = $viewModel.selectedPost.wrappedValue {
-                    FeedPostDetailsView(post: post)
+                    FeedPostDetailsView(post: post, user: viewModel.currentUser, likePostAction: { likePost(id: post.id) })
                 }
             })
             .toolbarBackground(.visible, for: .navigationBar)
@@ -84,6 +83,8 @@ struct FeedView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
     }
+
+    // MARK: - Private Methods
 
     private func deletePost(id: UUID) {
         withAnimation {

@@ -41,7 +41,12 @@ struct SearchBarView: View {
 
 // MARK: - Previews
 
-#Preview("Not Detailed") {
+#Preview("No Text") {
     SearchBarView(searchText: .constant(""))
+        .padding()
+}
+
+#Preview("Text") {
+    SearchBarView(searchText: .constant("New Post"))
         .padding()
 }

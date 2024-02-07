@@ -42,6 +42,10 @@ enum Const {
         static let bulletPointSymbol = "•"
     }
 
+    enum UserDefaults {
+        static let currentUserKey = "CurrentUserKey"
+    }
+
     // MARK: - Enums
 
     enum EmptyStateType {

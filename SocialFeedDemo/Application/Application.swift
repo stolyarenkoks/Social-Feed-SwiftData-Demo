@@ -25,6 +25,18 @@ struct Application: App {
         }
     }()
 
+    static var currentUser: User {
+        guard let data = UserDefaults.standard.object(forKey: Const.UserDefaults.currentUserKey) as? Data,
+              let user = try? JSONDecoder().decode(User.self, from: data) else {
+            let newUser = User.mock()
+            if let newUserData = try? JSONEncoder().encode(newUser) {
+                UserDefaults.standard.set(newUserData, forKey: Const.UserDefaults.currentUserKey)
+            }
+            return newUser
+        }
+        return user
+    }
+
     var body: some Scene {
         WindowGroup {
             MainTabView()

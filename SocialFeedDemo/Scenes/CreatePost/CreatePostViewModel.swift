@@ -22,6 +22,7 @@ extension CreatePostView {
         @Published var textFieldText: String = ""
         @Published var imagePickerItem: PhotosPickerItem?
         @Published var selectedImageData: Data?
+        @Published var shouldDismiss: Bool = false
 
         var selectedImage: UIImage? {
             if let imageData = selectedImageData {
@@ -34,7 +35,7 @@ extension CreatePostView {
             textFieldText.count >= 3
         }
 
-        let currentUser: User = .current
+        let currentUser: User = Application.currentUser
 
         // MARK: - Internal Methods
 
@@ -49,6 +50,10 @@ extension CreatePostView {
         func removeImage() {
             imagePickerItem = nil
             selectedImageData = nil
+        }
+
+        func dismiss() {
+            shouldDismiss = true
         }
     }
 }
