@@ -81,7 +81,7 @@ struct FeedPostView: View {
         }
     }
 
-    // MARK: - Private Methods
+    // MARK: - Private UI Elements
 
     private func userInfo() -> some View {
         HStack {
@@ -174,26 +174,9 @@ struct FeedPostView: View {
 
     private func postReactions() -> some View {
         HStack(spacing: -2) {
-            Image(systemName: "hand.thumbsup.fill")
-                .frame(width: 16, height: 16)
-                .foregroundStyle(.white)
-                .background(.blue)
-                .clipShape(Circle())
-                .font(.system(size: 9))
-
-            Image(systemName: "hands.clap.fill")
-                .frame(width: 16, height: 16)
-                .foregroundStyle(.white)
-                .background(.purple)
-                .clipShape(Circle())
-                .font(.system(size: 9))
-
-            Image(systemName: "heart.fill")
-                .frame(width: 16, height: 16)
-                .foregroundStyle(.white)
-                .background(.red)
-                .clipShape(Circle())
-                .font(.system(size: 9))
+            reactionImage(imageName: "hand.thumbsup.fill", backgroundColor: .blue)
+            reactionImage(imageName: "hands.clap.fill", backgroundColor: .purple)
+            reactionImage(imageName: "heart.fill", backgroundColor: .red)
 
             Text("\(post.likesCount)")
                 .contentTransition(.numericText())
@@ -228,10 +211,16 @@ struct FeedPostView: View {
                 .frame(maxHeight: 0.5)
 
             HStack(spacing: 65.0) {
-                actionButton(imageName: "hand.thumbsup", title: Const.FeedPostView.likeButtonTitle, action: {
-                    playbackMode = .playing(.fromProgress(0, toProgress: 0.8, loopMode: .playOnce))
-                    likePostAction?()
+                actionButton(imageName: "hand.thumbsup", title: Const.FeedPostView.likeButtonTitle, action: likeAction)
+                .contextMenu(menuItems: {
+                    ControlGroup {
+                        actionButton(imageName: "hand.thumbsup.fill", action: likeAction)
+                        actionButton(imageName: "hands.clap.fill", action: likeAction)
+                        actionButton(imageName: "heart.fill", action: likeAction)
+                    }
+                    .controlGroupStyle(.compactMenu)
                 })
+
                 actionButton(imageName: "text.bubble", title: Const.FeedPostView.commentButtonTitle, action: {})
                 actionButton(imageName: "arrow.2.squarepath", title: Const.FeedPostView.repostButtonTitle, action: {})
                 actionButton(imageName: "paperplane.fill", title: Const.FeedPostView.sendButtonTitle, action: {})
@@ -240,18 +229,36 @@ struct FeedPostView: View {
         .padding(.bottom, 8.0)
     }
 
-    private func actionButton(imageName: String, title: String, action: @escaping () -> Void) -> some View {
+    private func actionButton(imageName: String, title: String? = nil, action: @escaping () -> Void) -> some View {
         Button(action: action, label: {
             VStack(spacing: 2) {
                 Image(systemName: imageName)
                     .font(.footnote)
 
-                Text(title)
-                    .font(.caption)
+                if let title = title {
+                    Text(title)
+                        .font(.caption)
+                }
             }
         })
         .foregroundStyle(Color(uiColor: UIColor.darkGray))
         .bold()
+    }
+
+    private func reactionImage(imageName: String, backgroundColor: Color) -> some View {
+        Image(systemName: imageName)
+            .frame(width: 16, height: 16)
+            .foregroundStyle(.white)
+            .background(backgroundColor)
+            .clipShape(Circle())
+            .font(.system(size: 9))
+    }
+
+    // MARK: - Actions
+
+    private func likeAction() {
+        playbackMode = .playing(.fromProgress(0, toProgress: 0.8, loopMode: .playOnce))
+        likePostAction?()
     }
 }
 
