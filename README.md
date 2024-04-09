@@ -1,6 +1,6 @@
 # Social Feed SwiftData Demo like LinkedIn
 An example of the LinkedIn main feed, featuring the post creation screen along with related post actions and animations, stored in SwiftData instead of BE.
-Developed entirely natively using Swift, SwiftUI and SwiftData.
+Developed entirely natively using Swift, SwiftUI and SwiftData with CloudKit synchronization.
 
 ![Demo](demo.gif)
 
@@ -14,6 +14,7 @@ No additional setup is needed. Build project using Xcode.
 * Swift
 * SwiftUI
 * SwiftData
+* CloudKit
 * Lottie
 
 ## Versions
