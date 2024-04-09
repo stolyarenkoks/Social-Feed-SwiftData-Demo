@@ -20,6 +20,7 @@ extension FeedView {
 
         @Published var isCreatePostPresented = false
         @Published var isPostDetailsPresented = false
+        @Published var isActionSheetPresented = false
         @Published var selectedPost: Post?
         @Published var searchText = ""
 
@@ -27,8 +28,19 @@ extension FeedView {
 
         // MARK: - Internal Methods
 
+        func like(post: Post) {
+            withAnimation {
+                post.likesCount += 1
+            }
+        }
+
         func presentCreatePost() {
             isCreatePostPresented.toggle()
+        }
+
+        func presentActionSheet(post: Post) {
+            selectedPost = post
+            isActionSheetPresented.toggle()
         }
 
         func showDetails(post: Post) {

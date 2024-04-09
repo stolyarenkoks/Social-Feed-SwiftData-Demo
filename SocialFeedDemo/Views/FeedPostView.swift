@@ -16,15 +16,14 @@ struct FeedPostView: View {
     // MARK: - Private Properties
 
     @State private var isTruncated: Bool = false
-    @State private var isActionSheetPresented: Bool = false
     @State private var playbackMode: LottiePlaybackMode = .paused
 
     private let post: Post
     private let user: User
     private let isDetailed: Bool
     private let likePostAction: (() -> Void)?
-    private let deletePostAction: (() -> Void)?
     private let showMoreAction: (() -> Void)?
+    private let showDetailsAction: (() -> Void)?
 
     // MARK: - Init
 
@@ -33,15 +32,15 @@ struct FeedPostView: View {
         user: User,
         isDetailed: Bool = false,
         likePostAction: (() -> Void)? = nil,
-        deletePostAction: (() -> Void)? = nil,
-        showMoreAction: (() -> Void)? = nil
+        showMoreAction: (() -> Void)? = nil,
+        showDetailsAction: (() -> Void)? = nil
     ) {
         self.post = post
         self.user = user
         self.isDetailed = isDetailed
         self.likePostAction = likePostAction
-        self.deletePostAction = deletePostAction
         self.showMoreAction = showMoreAction
+        self.showDetailsAction = showDetailsAction
     }
 
     // MARK: - Body
@@ -67,17 +66,6 @@ struct FeedPostView: View {
                 postActions()
             }
             .background(.white)
-        }
-        .actionSheet(isPresented: $isActionSheetPresented) {
-            ActionSheet(
-                title: Text(Const.FeedPostView.actionSheetTitle),
-                buttons: [
-                    .destructive(Text(Const.FeedPostView.actionSheetDeleteButtonTitle)) {
-                        deletePostAction?()
-                    },
-                    .cancel()
-                ]
-            )
         }
     }
 
@@ -125,12 +113,15 @@ struct FeedPostView: View {
             Spacer()
 
             if !isDetailed {
-                Button("", systemImage: "ellipsis") {
-                    isActionSheetPresented = true
+                Button {
+                    showMoreAction?()
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .frame(width: 32, height: 32)
+                        .font(.title3)
+                        .foregroundStyle(Color(uiColor: UIColor.darkGray))
+                        .padding(.top, -16)
                 }
-                .font(.title3)
-                .foregroundStyle(Color(uiColor: UIColor.darkGray))
-                .padding(.top, -16)
             }
         }
         .padding(.horizontal)
@@ -157,6 +148,7 @@ struct FeedPostView: View {
             .resizable()
             .aspectRatio(contentMode: isDetailed ? .fit : .fill)
             .frame(maxHeight: isDetailed ? .infinity : 400)
+            .contentShape(Rectangle())
             .clipped()
     }
 
@@ -188,7 +180,7 @@ struct FeedPostView: View {
 
             if !isDetailed && isTruncated {
                 Button {
-                    showMoreAction?()
+                    showDetailsAction?()
                 } label: {
                     HStack(spacing: 4) {
                         Text(Const.FeedPostView.seeMoreButtonTitle)

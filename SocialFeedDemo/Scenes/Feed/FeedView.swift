@@ -36,18 +36,19 @@ struct FeedView: View {
                                 FeedPostView(
                                     post: post,
                                     user: viewModel.currentUser,
-                                    likePostAction: { like(post: post) },
-                                    deletePostAction: { delete(post: post) },
-                                    showMoreAction: { viewModel.showDetails(post: post) }
+                                    likePostAction: { viewModel.like(post: post) },
+                                    showMoreAction: { viewModel.presentActionSheet(post: post) },
+                                    showDetailsAction: { viewModel.showDetails(post: post) }
                                 )
                             }
                         }
                     }
-                    .navigationDestination(isPresented: $viewModel.isPostDetailsPresented, destination: {
-                        if let post = $viewModel.selectedPost.wrappedValue {
-                            FeedPostDetailsView(post: post, user: viewModel.currentUser, likePostAction: { like(post: post) })
-                        }
-                    })
+                    .navigationDestination(isPresented: $viewModel.isPostDetailsPresented) {
+                        postDetailsView()
+                    }
+                    .actionSheet(isPresented: $viewModel.isActionSheetPresented) {
+                        actionSheet()
+                    }
                 } else {
                     EmptyStateView(type: .noPosts)
                 }
@@ -84,17 +85,34 @@ struct FeedView: View {
         }
     }
 
+    // MARK: - Private UI Elements
+
+    private func postDetailsView() -> some View {
+        let post = $viewModel.selectedPost.wrappedValue ?? .mock(text: "Unselected Post")
+        return FeedPostDetailsView(post: post,
+                                   user: viewModel.currentUser,
+                                   likePostAction: { viewModel.like(post: post) })
+    }
+
+    private func actionSheet() -> ActionSheet {
+        ActionSheet(
+            title: Text(Const.FeedPostView.actionSheetTitle),
+            buttons: [
+                .destructive(Text(Const.FeedPostView.actionSheetDeleteButtonTitle)) {
+                    if let post = $viewModel.selectedPost.wrappedValue {
+                        delete(post: post)
+                    }
+                },
+                .cancel()
+            ]
+        )
+    }
+
     // MARK: - Private Methods
 
     private func delete(post: Post) {
         withAnimation {
             modelContext.delete(post)
-        }
-    }
-
-    private func like(post: Post) {
-        withAnimation {
-            post.likesCount += 1
         }
     }
 }
