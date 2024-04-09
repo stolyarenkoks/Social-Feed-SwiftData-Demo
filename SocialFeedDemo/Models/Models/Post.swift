@@ -11,13 +11,11 @@ import UIKit
 
 @Model
 final class Post {
-    @Attribute(.unique)
-    let id: UUID
-
-    let userId: UUID
-    var text: String
-    var likesCount: Int
-    let date: Date
+    let id: UUID = UUID()
+    var userId: UUID = UUID()
+    var text: String = ""
+    var likesCount: Int = Int.zero
+    let date: Date = Date.now
 
     @Attribute(.externalStorage)
     private var imageData: Data?
@@ -34,7 +32,7 @@ final class Post {
         id: UUID = UUID(),
         userId: UUID,
         text: String,
-        likesCount: Int = 0,
+        likesCount: Int = .zero,
         date: Date = .now,
         imageData: Data? = nil
     ) {

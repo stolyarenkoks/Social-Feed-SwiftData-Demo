@@ -33,7 +33,7 @@ extension FeedView {
 
         func showDetails(post: Post) {
             selectedPost = post
-            isPostDetailsPresented = true
+            isPostDetailsPresented.toggle()
         }
 
         func showUserProfile() {

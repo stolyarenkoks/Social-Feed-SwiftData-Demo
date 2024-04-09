@@ -41,9 +41,13 @@ struct FeedView: View {
                                     showMoreAction: { viewModel.showDetails(post: post) }
                                 )
                             }
-                            .id(UUID())
                         }
                     }
+                    .navigationDestination(isPresented: $viewModel.isPostDetailsPresented, destination: {
+                        if let post = $viewModel.selectedPost.wrappedValue {
+                            FeedPostDetailsView(post: post, user: viewModel.currentUser, likePostAction: { like(post: post) })
+                        }
+                    })
                 } else {
                     EmptyStateView(type: .noPosts)
                 }
@@ -74,11 +78,6 @@ struct FeedView: View {
             .fullScreenCover(isPresented: $viewModel.isCreatePostPresented) {
                 CreatePostView(viewModel: .init())
             }
-            .navigationDestination(isPresented: $viewModel.isPostDetailsPresented, destination: {
-                if let post = $viewModel.selectedPost.wrappedValue {
-                    FeedPostDetailsView(post: post, user: viewModel.currentUser, likePostAction: { like(post: post) })
-                }
-            })
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbarBackground(.white, for: .navigationBar)
             .navigationBarTitleDisplayMode(.inline)
