@@ -23,13 +23,15 @@ struct EmptyStateView: View {
         ZStack {
             Color(uiColor: .systemGray6)
 
-            LottieView(animation: .named(type.animationName))
-                .playing(loopMode: .loop)
+            VStack(spacing: type == .noPosts ? .zero : 100) {
+                LottieView(animation: .named(type.animationName))
+                    .playing(loopMode: .loop)
+                    .aspectRatio(contentMode: .fit)
 
-            Text(type.title)
-                .multilineTextAlignment(.center)
-                .padding(.top, type == .noPosts ? 350 : 400)
-                .foregroundStyle(Color(uiColor: .systemGray))
+                Text(type.title)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(Color(uiColor: .systemGray))
+            }
         }
         .padding(.top, -50)
         .padding(.horizontal, type == .noPosts ? .zero : 40)
