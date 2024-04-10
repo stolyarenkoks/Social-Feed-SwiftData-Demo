@@ -80,7 +80,7 @@ struct FeedView: View {
                 CreatePostView(viewModel: .init())
             }
             .toolbarBackground(.visible, for: .navigationBar)
-            .toolbarBackground(.white, for: .navigationBar)
+            .toolbarBackground(Color(uiColor: .systemBackground), for: .navigationBar)
             .navigationBarTitleDisplayMode(.inline)
         }
     }

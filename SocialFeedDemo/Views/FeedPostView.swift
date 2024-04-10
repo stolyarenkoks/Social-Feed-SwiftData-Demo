@@ -65,7 +65,7 @@ struct FeedPostView: View {
                 postReactions()
                 postActions()
             }
-            .background(.white)
+            .background(.background)
         }
     }
 
