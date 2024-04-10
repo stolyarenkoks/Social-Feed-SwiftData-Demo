@@ -13,9 +13,7 @@ struct CreatePostView: View {
 
     // MARK: - Private Properties
 
-    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-
     @ObservedObject private var viewModel: ViewModel
 
     // MARK: - Init
@@ -100,7 +98,7 @@ struct CreatePostView: View {
     // MARK: - Private Methods
 
     private func postButton() -> some View {
-        Button(action: addPost) {
+        Button(action: viewModel.addPost) {
             Text(Const.CreatePost.postButtonTitle)
                 .font(.callout)
                 .bold()
@@ -148,21 +146,16 @@ struct CreatePostView: View {
             }
         }
     }
-
-    private func addPost() {
-        let newPost = Post(
-            userId: viewModel.currentUser.id,
-            text: viewModel.textFieldText,
-            imageData: viewModel.selectedImageData
-        )
-        modelContext.insert(newPost)
-        viewModel.dismiss()
-    }
 }
 
 // MARK: - Preview
 
 #Preview {
-    CreatePostView(viewModel: .init())
-        .modelContainer(for: [Post.self], inMemory: true)
+    do {
+        let previewer = try PostsPreviewer()
+        return CreatePostView(viewModel: .init(modelContext: previewer.container.mainContext))
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Failed to create preview: \(error.localizedDescription)")
+    }
 }

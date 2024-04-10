@@ -7,6 +7,7 @@
 //
 
 import PhotosUI
+import SwiftData
 import SwiftUI
 
 // MARK: - CreatePostViewModel
@@ -37,7 +38,27 @@ extension CreatePostView {
 
         let currentUser: User = Application.currentUser
 
+        // MARK: - Private Properties
+
+        private var modelContext: ModelContext
+
+        // MARK: - Init
+
+        init(modelContext: ModelContext) {
+            self.modelContext = modelContext
+        }
+
         // MARK: - Internal Methods
+
+        func addPost() {
+            let newPost = Post(
+                userId: currentUser.id,
+                text: textFieldText,
+                imageData: selectedImageData
+            )
+            modelContext.insert(newPost)
+            shouldDismiss = true
+        }
 
         func prepareImage() async {
             if let imageData = try? await imagePickerItem?.loadTransferable(type: Data.self) {

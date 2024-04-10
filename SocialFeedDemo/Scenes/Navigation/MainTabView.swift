@@ -6,6 +6,7 @@
 //  Copyright © 2024 SKS. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 // MARK: - MainTabView
@@ -14,12 +15,16 @@ struct MainTabView: View {
 
     // MARK: - Private Properties
 
-    @State private var isPresented = false
+    @State private var isCreatePostPresented = false
     @State private var selectedTab = 1
+
+    private var modelContext: ModelContext
 
     // MARK: - Init
 
-    init() {
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+
         let appeareance = UITabBarAppearance()
         appeareance.backgroundColor = .systemBackground
 
@@ -32,7 +37,7 @@ struct MainTabView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
 
-            FeedView(viewModel: .init())
+            FeedView(viewModel: .init(modelContext: modelContext, isCreatePostPresented: $isCreatePostPresented))
                 .tabItem({
                     Label(Const.MainTabView.homeTitle, systemImage: "house")
                 })
@@ -65,19 +70,31 @@ struct MainTabView: View {
         .accentColor(.primary)
         .onChange(of: selectedTab) { _, _ in
             if selectedTab == 3 {
-                isPresented = true
+                isCreatePostPresented = true
                 selectedTab = .zero
             }
-        }
-        .fullScreenCover(isPresented: $isPresented) {
-            CreatePostView(viewModel: .init())
         }
     }
 }
 
 // MARK: - Preview
 
-#Preview {
-    MainTabView()
-        .modelContainer(for: [Post.self], inMemory: true)
+#Preview("No Post") {
+    do {
+        let previewer = try PostsPreviewer()
+        return MainTabView(modelContext: previewer.container.mainContext)
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Failed to create preview: \(error.localizedDescription)")
+    }
+}
+
+#Preview("3 Posts") {
+    do {
+        let previewer = try PostsPreviewer(posts: [.mock(), .mock(), .mock()])
+        return MainTabView(modelContext: previewer.container.mainContext)
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Failed to create preview: \(error.localizedDescription)")
+    }
 }

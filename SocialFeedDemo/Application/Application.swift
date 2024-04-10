@@ -39,7 +39,7 @@ struct Application: App {
 
     var body: some Scene {
         WindowGroup {
-            MainTabView()
+            MainTabView(modelContext: sharedModelContainer.mainContext)
         }
         .modelContainer(sharedModelContainer)
     }

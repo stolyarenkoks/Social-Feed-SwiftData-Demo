@@ -6,15 +6,11 @@
 //  Copyright © 2024 SKS. All rights reserved.
 //
 
-import SwiftData
 import SwiftUI
 
 struct FeedView: View {
 
     // MARK: - Private Properties
-
-    @Environment(\.modelContext) private var modelContext
-    @Query(sort: \Post.date, order: .reverse) private var posts: [Post]
 
     @ObservedObject private var viewModel: ViewModel
 
@@ -29,10 +25,10 @@ struct FeedView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if !posts.isEmpty {
+                if !viewModel.posts.isEmpty {
                     ScrollView {
                         LazyVStack {
-                            ForEach(posts) { post in
+                            ForEach(viewModel.filteredPosts) { post in
                                 FeedPostView(
                                     post: post,
                                     user: viewModel.currentUser,
@@ -48,6 +44,9 @@ struct FeedView: View {
                     }
                     .actionSheet(isPresented: $viewModel.isActionSheetPresented) {
                         actionSheet()
+                    }
+                    .overlay {
+                        if viewModel.filteredPosts.isEmpty { ContentUnavailableView.search }
                     }
                 } else {
                     EmptyStateView(type: .noPosts)
@@ -76,9 +75,11 @@ struct FeedView: View {
                     }
                 }
             }
-            .fullScreenCover(isPresented: $viewModel.isCreatePostPresented) {
-                CreatePostView(viewModel: .init())
-            }
+            .fullScreenCover(isPresented: viewModel.isCreatePostPresented, onDismiss: {
+                viewModel.fetchPosts()
+            }, content: {
+                CreatePostView(viewModel: .init(modelContext: viewModel.modelContext))
+            })
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbarBackground(Color(uiColor: .systemBackground), for: .navigationBar)
             .navigationBarTitleDisplayMode(.inline)
@@ -99,27 +100,43 @@ struct FeedView: View {
             title: Text(Const.FeedPostView.actionSheetTitle),
             buttons: [
                 .destructive(Text(Const.FeedPostView.actionSheetDeleteButtonTitle)) {
-                    if let post = $viewModel.selectedPost.wrappedValue {
-                        delete(post: post)
-                    }
+                    guard let post = $viewModel.selectedPost.wrappedValue else { return }
+                    viewModel.delete(post: post)
                 },
                 .cancel()
             ]
         )
     }
-
-    // MARK: - Private Methods
-
-    private func delete(post: Post) {
-        withAnimation {
-            modelContext.delete(post)
-        }
-    }
 }
 
 // MARK: - Preview
 
-#Preview {
-    FeedView(viewModel: .init())
-        .modelContainer(for: [Post.self], inMemory: true)
+#Preview("No Post") {
+    do {
+        let previewer = try PostsPreviewer()
+        return FeedView(viewModel: .init(modelContext: previewer.container.mainContext, isCreatePostPresented: .constant(false)))
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Failed to create preview: \(error.localizedDescription)")
+    }
+}
+
+#Preview("1 Post") {
+    do {
+        let previewer = try PostsPreviewer(posts: [.mock()])
+        return FeedView(viewModel: .init(modelContext: previewer.container.mainContext, isCreatePostPresented: .constant(false)))
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Failed to create preview: \(error.localizedDescription)")
+    }
+}
+
+#Preview("3 Posts") {
+    do {
+        let previewer = try PostsPreviewer(posts: [.mock(), .mock(), .mock()])
+        return FeedView(viewModel: .init(modelContext: previewer.container.mainContext, isCreatePostPresented: .constant(false)))
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Failed to create preview: \(error.localizedDescription)")
+    }
 }
